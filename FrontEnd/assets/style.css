@@ -53,8 +53,7 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
-header .headerCtnt{
-	order: 2;
+header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
@@ -281,36 +280,145 @@ footer nav ul {
 
 /***** Mode Edition accueil *****/
 
-header {
-	display: flex;
-	flex-direction: column;
-}
 
 .headerEdit {
+	padding-top: 49px;
+}
+
+.bandeauEdit {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 59px;
-	width: 100%;
+	width: 100vw;
 	color: white;
 	background-color: black;
-	order: 0;
+	margin-left: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .titleProjectsEdit {
 	display: flex;
-	justify-content: center;
 	align-items: center;
+	margin-left: 36%;
 }
 
-.btnModif {
+.modal-btn {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 25px;
-	padding-left: 20px;
+	margin-left: 5px;
+	cursor: pointer;
+	background: none;
+	border: none;
 }
 
+/*** ***/
 
+/***** Modale *****/
 
+.modal-container {
+	display: none;
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+}
 
+.modal-container.active{
+	display: block;
+}
+
+.overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #333333d3;
+}
+
+.modal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+	max-width: 630px;
+	padding: 50px 70px;
+	background-color: #fff;
+	border-radius: 10px;
+	position: absolute;
+	top: 42%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.modal h1 {
+	font-family: 'Work Sans' ;
+	color: black;
+	font-weight: 400;
+	font-size: 26px;
+}
+
+.addPhoto {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	color: white;
+	cursor: pointer;
+	border: none;
+	width: 237px;
+	height: 36px;
+	border-radius: 60px;
+	background-color: #1D6154;
+}
+
+.close-modal {
+	border: none;
+	font-size: 18px;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.modal-ctnt {
+	width: 420px;
+	height: 420px;
+	border-bottom: solid #B3B3B3 1px;
+	overflow: auto;
+}
+
+.gridModal {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	row-gap: 25px;
+	column-gap: 10px;
+	width: 420px;
+
+}
+
+.gridModal img {
+  width: 76px;
+  height: 102px;       
+  object-fit: cover; 
+}
+
+.gridModal button {
+	font-size: 10px;
+	padding: 4px 5px 3px 5px;
+	border-radius: 2px;
+	color: white;
+	background-color: black;
+	border: none;
+	cursor: pointer;
+}
+
+.gridModal button:hover {
+	border: solid rgb(20, 135, 229) 1px;
+}
+
+/***** Formulaire ajout photo *****/
