@@ -1,224 +1,223 @@
 async function main() {
-  const reponse = await fetch('http://localhost:5678/api/works');
-  const projets = await reponse.json(); 
-  console.log(projets); 
+    const reponse = await fetch('http://localhost:5678/api/works');
+    const projets = await reponse.json(); 
+    console.log(projets); 
 
-  const gallery = document.querySelector('.gallery');   
+    const gallery = document.querySelector('.gallery');   
 
-  //Réinitialisation de la gallerie//
+    //Réinitialisation de la gallerie//
 
-  let affichageGallerie = document.querySelector('.gallery');
-  affichageGallerie.textContent = '';
-
-  //Création des boutons filtres// 
-
-  const filtres = document.querySelector('.filtres');
-const labels = ["Tous", "Objets", "Appartements", "Hotels & restaurants"];
-
-for (let i = 0; i < labels.length; i++) {
-  const btn = document.createElement('button');
-  btn.textContent = labels[i];
-  filtres.appendChild(btn);
-}
-
-//******//
-
-  //Affichage des projets à partir des données provenant de l'API//
-
-function afficherProjets (listeFiltree) {for (let i = 0; i < listeFiltree.length; i++) {
-  const fig = document.createElement('figure');
-  const img = document.createElement('img');
-  img.src = listeFiltree[i].imageUrl;
-  img.alt = listeFiltree[i].title;
-  
-  const caption = document.createElement('figcaption');
-  caption.textContent = listeFiltree[i].title;
-  
-  fig.appendChild(img);
-  fig.appendChild(caption);
-  gallery.appendChild(fig);
-}
-}
-
-afficherProjets (projets);
-
-/***** Activation du bouton "Tous" dès le chargement de la page *****/
-
-document.querySelectorAll('.filtres button').forEach(btn => {
-  if (btn.textContent.trim() === 'Tous') btn.classList.add('btnFiltreActif');
-});
-
-//*******//
-
-//Filtrage//
-
-
-document.querySelector('.filtres').addEventListener('click', e => {
-  if (e.target.textContent === 'Tous') {
-    document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
-    e.target.classList.add('btnFiltreActif');
-
+    let affichageGallerie = document.querySelector('.gallery');
     affichageGallerie.textContent = '';
-    afficherProjets (projets); 
-  }
 
-  if (e.target.textContent === 'Objets') {
-    document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
-    e.target.classList.add('btnFiltreActif');
+    //Création des boutons filtres// 
 
-    const objets = projets.filter(p => p.category.name === 'Objets');
-    affichageGallerie.textContent = '';
-    afficherProjets (objets); 
-  }
+    const filtres = document.querySelector('.filtres');
+    const labels = ["Tous", "Objets", "Appartements", "Hotels & restaurants"];
 
-  if (e.target.textContent === 'Appartements') {
-    document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
-    e.target.classList.add('btnFiltreActif');
+    for (let i = 0; i < labels.length; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = labels[i];
+    filtres.appendChild(btn);
+    }
 
-    const appartements = projets.filter(p => p.category.name === 'Appartements');
-    affichageGallerie.textContent = '';
-    afficherProjets (appartements); 
-  }
+    //Affichage des projets à partir des données provenant de l'API//
 
-  if (e.target.textContent === 'Hotels & restaurants') {
-    document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
-    e.target.classList.add('btnFiltreActif');
+            function afficherProjets (listeFiltree) {for (let i = 0; i < listeFiltree.length; i++) {
+              const fig = document.createElement('figure');
+              const img = document.createElement('img');
+              img.src = listeFiltree[i].imageUrl;
+              img.alt = listeFiltree[i].title;
+              
+              const caption = document.createElement('figcaption');
+              caption.textContent = listeFiltree[i].title;
+              
+              fig.appendChild(img);
+              fig.appendChild(caption);
+              gallery.appendChild(fig);
+            }
+            }
 
-    const hotelsRestaurants = projets.filter(p => p.category.name === 'Hotels & restaurants');
-    affichageGallerie.textContent = '';
-    afficherProjets (hotelsRestaurants); 
-  }
+    afficherProjets (projets);
 
-});
+    /***** Activation du bouton "Tous" dès le chargement de la page *****/
 
-/***** Affichage du mode édition de la paage d'accueil *****/
-
-const params = new URLSearchParams(window.location.search);
-const hasEditParam = params.get('mode') === 'edit';
-const hasToken = !!localStorage.getItem('token');
-
-if (hasEditParam && hasToken) {
-  initEditMode();
-}
-
-/*** ***/
-
-/*** Modale ***/
-
-  const modalContainer = document.querySelector(".modal-container");
-  const modalTriggers = document.querySelectorAll(".modal-trigger");
-
-  function toggleModal() {
-    modalContainer.classList.toggle("active")
-  };
-
-  modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal));
-
-/*** ***/
-
-// Affichage des projets dans la modale
-
-function afficherProjetsModal (projets) {for (let i = 0; i < projets.length; i++) {
-  const fig = document.createElement('figure');
-  fig.style.position = "relative";
-
-  const img = document.createElement('img');
-  img.src = projets[i].imageUrl;
-  img.alt = projets[i].title;
-  
-  const btn = document.createElement('button');
-    btn.innerHTML= `<i class="fa-solid fa-trash-can"></i>`; 
-    btn.style.position = "absolute";
-    btn.style.top = "5px";
-    btn.style.right = "5px";
-
-    // Suppression grâce au bouton poubelle. 
-
-    btn.addEventListener('click', async () => {
-      const figEl = btn.closest('figure');
-      const imgEl = figEl.querySelector('img');
-      const url = imgEl.getAttribute('src');
-
-      const cible = projets.find(p => p.imageUrl === url);
-      const idASupprimer = cible.id;
-      console.log('ID à supprimer :', idASupprimer);
-
-        // On récupère le token depuis le localStorage
-      const token = localStorage.getItem('token');
-
-      // On envoie la requête DELETE vers l’API
-      const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
-      method: 'DELETE',
-      headers: {
-      'Authorization': `Bearer ${token}`,           // On présente le token
-      'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
-      }
-      });
-
-      if (response.ok) {
-      figEl.remove();
-      console.log(`Projet ${idASupprimer} supprimé`);
-
-        //MAJ dynamique de index mode edit en fond
-
-      const newReponse = await fetch('http://localhost:5678/api/works');
-      const newProjets = await newReponse.json(); 
-      affichageGallerie.textContent = '';
-      afficherProjets(newProjets);
-      }
-
-
+    document.querySelectorAll('.filtres button').forEach(btn => {
+    if (btn.textContent.trim() === 'Tous') btn.classList.add('btnFiltreActif');
     });
-  
-  fig.appendChild(img);
-  fig.appendChild(btn);
-  const gridModal = document.querySelector(".gridModal");
-  gridModal.appendChild(fig);
-  
-      
-}
-/***** *****/
 
-// Ajout d'une nouvelle photo
+    //Filtrage//
 
-const btnAddPhoto = document.querySelector(".addPhoto");
-const modal = document.querySelector(".modal");
+            document.querySelector('.filtres').addEventListener('click', e => {
+              if (e.target.textContent === 'Tous') {
+                document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
+                e.target.classList.add('btnFiltreActif');
 
-btnAddPhoto.addEventListener('click', async () => {
-  
-  modal.innerHTML = 
-  `<button class="close-modal modal-trigger"><i class="fa-solid fa-xmark"></i></button>
-		<h1>Ajout photo</h1>
+                affichageGallerie.textContent = '';
+                afficherProjets (projets); 
+                }
 
-		<form id="ajoutPhotoForm">
+                if (e.target.textContent === 'Objets') {
+                document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
+                e.target.classList.add('btnFiltreActif');
 
-			<label for="title">Titre</label>
-      <input type="text" id="title" name="title">
+                const objets = projets.filter(p => p.category.name === 'Objets');
+                affichageGallerie.textContent = '';
+                afficherProjets (objets); 
+                }
 
-      <label for="categorie">Catégorie</label>
-      <input type="text" id="categorie" name="categorie">
+                if (e.target.textContent === 'Appartements') {
+                document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
+                e.target.classList.add('btnFiltreActif');
 
-		</form>
+                const appartements = projets.filter(p => p.category.name === 'Appartements');
+                affichageGallerie.textContent = '';
+                afficherProjets (appartements); 
+                }
 
-		<button type="submit" form="ajoutPhotoForm" class="addPhoto">valider</button>
-  `
+                if (e.target.textContent === 'Hotels & restaurants') {
+                document.querySelectorAll('.filtres button').forEach(btn => btn.classList.remove('btnFiltreActif'));
+                e.target.classList.add('btnFiltreActif');
 
-})
+                const hotelsRestaurants = projets.filter(p => p.category.name === 'Hotels & restaurants');
+                affichageGallerie.textContent = '';
+                afficherProjets (hotelsRestaurants); 
+                }
+
+                });
+
+    /***** Affichage du mode édition de la page d'accueil *****/
+
+    const params = new URLSearchParams(window.location.search);
+    const hasEditParam = params.get('mode') === 'edit';
+    const hasToken = !!localStorage.getItem('token');
+
+    if (hasEditParam && hasToken) {
+      initEditMode();
+      }
+
+    /*** Ouverture fermerture Modale ***/
+
+    const modalContainer = document.querySelector(".modal-container");
+    const modalTriggers = document.querySelectorAll(".modal-trigger");
+    const modal1 = document.querySelector(".modal1");
+    const modal2 = document.querySelector(".modal2");
+
+            function toggleModal() {
+              modalContainer.classList.toggle("active")
+
+              if (!modalContainer.classList.contains("active")) {
+                // Quand la modale est désactivée
+                modal2.style.display = "none";
+                modal1.style.display = "flex";
+                //A chaque ouverture, la modale s'ouvre à la première page
+              }
+            };
+
+    modalTriggers.forEach(trigger => trigger.addEventListener("click", toggleModal));
+
+    // Contenu et comportement quand la modale est ouverte
+
+            function contenuModal (projets) {for (let i = 0; i < projets.length; i++) {
+              //Affichage des projets
+              const fig = document.createElement('figure');
+              fig.style.position = "relative";
+
+              const img = document.createElement('img');
+              img.src = projets[i].imageUrl;
+              img.alt = projets[i].title;
+              
+              const btn = document.createElement('button');
+              btn.innerHTML= `<i class="fa-solid fa-trash-can"></i>`; 
+              btn.style.position = "absolute";
+              btn.style.top = "5px";
+              btn.style.right = "5px";
+
+                          // Suppression grâce au bouton poubelle. 
+
+                          btn.addEventListener('click', async () => {
+                            const figEl = btn.closest('figure');
+                            const imgEl = figEl.querySelector('img');
+                            const url = imgEl.getAttribute('src');
+
+                            const cible = projets.find(p => p.imageUrl === url);
+                            const idASupprimer = cible.id;
+                            console.log('ID à supprimer :', idASupprimer);
+
+                              // On récupère le token depuis le localStorage
+                            const token = localStorage.getItem('token');
+
+                            // On envoie la requête DELETE vers l’API
+                            const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
+                            method: 'DELETE',
+                            headers: {
+                            'Authorization': `Bearer ${token}`,           // On présente le token
+                            'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
+                            }
+                            });
+
+                            if (response.ok) {
+                            figEl.remove();
+                            console.log(`Projet ${idASupprimer} supprimé`);
+
+                              //MAJ dynamique de index mode edit en fond
+
+                            const newReponse = await fetch('http://localhost:5678/api/works');
+                            const newProjets = await newReponse.json(); 
+                            affichageGallerie.textContent = '';
+                            afficherProjets(newProjets);
+                            }
+                          });
+                        
+              fig.appendChild(img);
+              fig.appendChild(btn);
+              const gridModal = document.querySelector(".gridModal");
+              gridModal.appendChild(fig);
+            }
+
+              // Ajout d'une nouvelle photo
+
+              const btnAddPhoto = document.querySelector(".addPhoto"); 
+
+                          btnAddPhoto.addEventListener('click', async () => {
+                            modal1.style.display = "none";
+                            modal2.style.display = "flex";
+                          }) 
+              // Bouton pour revenir en arrière
+              const btnBack = document.querySelector(".back-modal")
+
+                          btnBack.addEventListener('click', async () => {
+                            modal1.style.display = "flex";
+                            modal2.style.display = "none";
+                          })
+              // Afficher les catégories dans le formulaire
+              
+                          async function getCategory() {
+                            const response = await fetch("http://localhost:5678/api/categories");
+                            const categories = await response.json();
+                            console.log(categories);
+                            const inputCategory = document.querySelector(".inputCategory");
+                                  for (let i = 0; i < categories.length; i++){
+                                    const option = document.createElement("option");
+                                    const value = categories[i].id;
+                                    const txt = categories [i].name;
+                                    option.setAttribute("value", value);
+                                    option.innerText = txt;
+                                    inputCategory.appendChild(option);
+                                  }
+                          }
+              getCategory();
+
+              // Continuer sur l'envoie du formulaire ici 
+              
+              }
 
 
-
-
-}
-
-
-afficherProjetsModal(projets);
-
+    contenuModal(projets);
 
 }
 
 main();
-
-
 
 function initEditMode() {
 
