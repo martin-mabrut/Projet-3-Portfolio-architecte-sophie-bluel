@@ -115,10 +115,10 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="modal-container">
 
-	<div class="overlay modal-trigger"></div>
+	<div class="overlay modal-trigger reset-form"></div>
 
 	<div class="modal">
-		<button class="close-modal modal-trigger"><i class="fa-solid fa-xmark"></i></button>
+		<button class="close-modal modal-trigger reset-form"><i class="fa-solid fa-xmark"></i></button>
 		<div class="modal1">
 			<h1>Galerie photo</h1>
 			<div class="modal-ctnt">
@@ -128,12 +128,12 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 		</div>
 
 		<div class="modal2">
-			<button class="back-modal"><i class="fa-solid fa-arrow-left"></i></button>
+			<button class="back-modal reset-form"><i class="fa-solid fa-arrow-left"></i></button>
 				<h1>Ajout photo</h1>
 				<div class="formAddPhoto">
 					<form id="ajoutPhotoForm" class="ajoutPhotoForm">
 
-						<input type="file" id="image" accept=".jpg,.png" hidden>
+						<input type="file" id="image" name="image" accept=".jpg,.png" hidden required>
 
 						<div class="upload-box">
 							<i class="fa-regular fa-image upload-icon"></i>
@@ -143,19 +143,19 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 						<div class="inputForm">
 							<label for="title">Titre</label>
-							<input type="text" id="title" name="title" class="champAjoutPhoto">
+							<input type="text" id="title" name="title" class="champAjoutPhoto" required>
 						</div>
 
 						<div class="inputForm">
 							<label for="category">Catégorie</label>
-							<select id="category" name="category" class="champAjoutPhoto inputCategory">
+							<select id="category" name="category" class="champAjoutPhoto inputCategory" required>
 								<option value="" selected disabled hidden></option>
 							</select>
 						</div>
 					</form>    
 				</div> 
 
-             	<button type="submit" form="ajoutPhotoForm" class="addPhoto">valider</button>
+             	<button type="submit" form="ajoutPhotoForm" class="addPhotoValider">valider</button>
 		
 		</div>
 
