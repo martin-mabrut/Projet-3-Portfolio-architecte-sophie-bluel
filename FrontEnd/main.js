@@ -391,13 +391,11 @@ main();
 function initEditMode() {
 
   console.log('Mode édition activé ✅');
-  const bandeauEdit = document.createElement("p");
+  const bandeauEdit = document.createElement("div");
   bandeauEdit.innerHTML = `<span><i class="fa-regular fa-pen-to-square"></i> Mode édition </span>`
   bandeauEdit.classList.add("bandeauEdit")
   
   document.body.prepend(bandeauEdit);
-  const header = document.querySelector("header");
-  header.classList.add("headerEdit")
 
   const listeNav = document.querySelector("header ul")
   listeNav.innerHTML =
@@ -407,7 +405,7 @@ function initEditMode() {
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>`;
 
   const btnModif = document.createElement("button");
-  btnModif.innerHTML = `<i class="fa-regular fa-pen-to-square"></i>modifier`;
+  btnModif.innerHTML = `<i class="fa-regular fa-pen-to-square"></i><span>modifier</span>`;
   btnModif.classList.add("modal-btn", "modal-trigger");
   
   const titleProjectsEdit = document.getElementById("titleProjectsEdit");

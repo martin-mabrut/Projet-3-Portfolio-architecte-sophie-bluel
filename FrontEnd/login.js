@@ -3,8 +3,8 @@ document.querySelector('.formLogin').addEventListener('submit', async (e) => {
 
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const errorBox = document.getElementById('loginError');
-  errorBox.textContent = ''; // on vide l’erreur au cas où
+    const errorBox = document.querySelector(".loginError");
+    const bouton = document.querySelector(".btnSubmitLogin")
 
     const response = await fetch('http://localhost:5678/api/users/login', {
         method: 'POST',
@@ -24,6 +24,7 @@ document.querySelector('.formLogin').addEventListener('submit', async (e) => {
 
 
     } else {
-    errorBox.textContent = 'Identifiants invalides.';
+    errorBox.style.display = "flex";
+    bouton.style.marginTop = "0";
   }
 });
