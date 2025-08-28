@@ -149,24 +149,34 @@ async function main() {
                             const token = localStorage.getItem('token');
 
                             // On envoie la requête DELETE vers l’API
-                            const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
-                            method: 'DELETE',
-                            headers: {
-                            'Authorization': `Bearer ${token}`,           // On présente le token
-                            'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
-                            }
-                            });
+                            try {
+                              const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
+                              method: 'DELETE',
+                              headers: {
+                              'Authorization': `Bearer ${token}`,           // On présente le token
+                              'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
+                              }
+                              });
 
-                            if (response.ok) {
-                            figEl.remove();
-                            console.log(`Projet ${idASupprimer} supprimé`);
+                              if (response.ok) {
+                              figEl.remove();
+                              console.log(`Projet ${idASupprimer} supprimé`);
 
-                              //MAJ dynamique de index mode edit en fond
+                                //MAJ dynamique de index mode edit en fond
 
-                            const newReponse = await fetch('http://localhost:5678/api/works');
-                            const newProjets = await newReponse.json(); 
-                            affichageGallerie.textContent = '';
-                            afficherProjets(newProjets);
+                              const newReponse = await fetch('http://localhost:5678/api/works');
+                              const newProjets = await newReponse.json(); 
+                              affichageGallerie.textContent = '';
+                              afficherProjets(newProjets);
+                              } else { //Gestion de l'erreur si token perdu                              
+                                const tokenLost = document.querySelector(".message-erreur");
+                                tokenLost.style.display = "flex";
+                                tokenLost.innerText = "Connexion expirée. Veuillez vous reconnecter.";
+                              }
+                            } catch { //Gestion de l'erreur si pas de réponse du serveur                              
+                                const responseNone = document.querySelector(".message-erreur");
+                                responseNone.style.display = "flex";
+                                responseNone.innerText = "Une erreur est survenue. Réessayez ultérieurement.";
                             }
                           });
                         
@@ -223,13 +233,19 @@ async function main() {
 
                           inputFile.addEventListener("change", (event) => {
                             const file = event.target.files[0];
-                            const reader = new FileReader();
-
-                            reader.onload = (e) => {
-                              uploadBox.innerHTML = `<img src="${e.target.result}" alt="aperçu" class="preview-img">`;
-                            };
-
-                            reader.readAsDataURL(file);
+                            const tailleMax = 4 * 1024 * 1024; // 4 Mo en octets
+                            const extensionOk = file.name.endsWith(".jpg") || file.name.endsWith(".png");
+                                  if (!extensionOk || file.size > tailleMax) { //Gestion des formats et taille de l'image
+                                    inputFile.value = "";
+                                    const imgError = document.querySelector(".image-error");
+                                    imgError.style.display = "flex";
+                                  } else {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                      uploadBox.innerHTML = `<img src="${e.target.result}" alt="aperçu" class="preview-img">`;
+                                    };
+                                    reader.readAsDataURL(file);
+                                  }
                           });
               
               // Remise à zéro du form ou de l'aperçu de l'image, en cas de fermeture ou changement de page modale 
@@ -244,8 +260,14 @@ async function main() {
                                   `<i class="fa-regular fa-image upload-icon"></i>
                                   <label for="image" class="upload-btn">+ Ajouter photo</label>
                                   <p class="upload-info">jpg, png : 4mo max</p>
+                                  <p class="image-error">Vérifiez le format et la taille du fichier.</p>
                                   `;
-                                  });
+
+                                  const imgError = document.querySelector(".image-error");
+                                  const msgErrorForm = document.querySelector(".error-form-message");
+                                  imgError.style.display = "none";
+                                  msgErrorForm.style.display = "none";
+                                  });                                  
                           });
               
               //Conditions et soummission du formulaire
@@ -270,95 +292,103 @@ async function main() {
                                   const token = localStorage.getItem("token");
                                   const formData = new FormData(form);
 
-                                  const res = await fetch("http://localhost:5678/api/works", {
-                                    method: "POST",
-                                    headers: { Authorization: `Bearer ${token}` },
-                                    body: formData,
-                                  });
+                                  try {
+                                    const res = await fetch("http://localhost:5678/api/works", {
+                                      method: "POST",
+                                      headers: { Authorization: `Bearer ${token}` },
+                                      body: formData,
+                                    });
 
-                                  if (!res.ok) {
-                                    console.log("il y a eu une erreur");
-                                    return;
-                                  }
+                                              if (!res.ok) { //Gestion perte token
+                                                const msgErrorForm = document.querySelector(".error-form-message");
+                                                msgErrorForm.innerText = "Connexion expirée. Veuillez vous reconnecter."
+                                                msgErrorForm.style.display = "flex";
+                                              } else {
 
-                                  // ✅ Lire la réponse JSON et l'afficher
-                                  const data = await res.json();
-                                  console.log(data);
-                                  
-                                  form.reset();
-                                  uploadBox.innerHTML =  
-                                  `<i class="fa-regular fa-image upload-icon"></i>
-                                  <label for="image" class="upload-btn">+ Ajouter photo</label>
-                                  <p class="upload-info">jpg, png : 4mo max</p>
-                                  `;
-                                  toggleModal();
-
-                                  const lastReponse = await fetch('http://localhost:5678/api/works');
-                                  const lastProjets = await lastReponse.json(); 
-                                  affichageGallerie.textContent = '';
-                                  afficherProjets (lastProjets);
-
-                                  //Mise à jour du grid
-                                  const gridModal = document.querySelector(".gridModal");
-                                  gridModal.innerHTML = ``;
-                                  for (let i = 0; i < lastProjets.length; i++) {
-                                    //Affichage des projets
-                                    const fig = document.createElement('figure');
-                                    fig.style.position = "relative";
-
-                                    const img = document.createElement('img');
-                                    img.src = lastProjets[i].imageUrl;
-                                    img.alt = lastProjets[i].title;
-                                    
-                                    const btn = document.createElement('button');
-                                    btn.innerHTML= `<i class="fa-solid fa-trash-can"></i>`; 
-                                    btn.style.position = "absolute";
-                                    btn.style.top = "5px";
-                                    btn.style.right = "5px";
-
-                                                // Suppression grâce au bouton poubelle. 
-
-                                                btn.addEventListener('click', async () => {
-                                                  const figEl = btn.closest('figure');
-                                                  const imgEl = figEl.querySelector('img');
-                                                  const url = imgEl.getAttribute('src');
-
-                                                  const cible = lastProjets.find(p => p.imageUrl === url);
-                                                  const idASupprimer = cible.id;
-                                                  console.log('ID à supprimer :', idASupprimer);
-
-                                                    // On récupère le token depuis le localStorage
-                                                  const token = localStorage.getItem('token');
-
-                                                  // On envoie la requête DELETE vers l’API
-                                                  const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
-                                                  method: 'DELETE',
-                                                  headers: {
-                                                  'Authorization': `Bearer ${token}`,           // On présente le token
-                                                  'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
-                                                  }
-                                                  });
-
-                                                  if (response.ok) {
-                                                  figEl.remove();
-                                                  console.log(`Projet ${idASupprimer} supprimé`);
-
-                                                    //MAJ dynamique de index mode edit en fond
-
-                                                  const newReponse = await fetch('http://localhost:5678/api/works');
-                                                  const newProjets = await newReponse.json(); 
-                                                  affichageGallerie.textContent = '';
-                                                  afficherProjets(newProjets);
-                                                  }
-                                                });
+                                              // ✅ Lire la réponse JSON et l'afficher
+                                              const data = await res.json();
+                                              console.log(data);
                                               
-                                    fig.appendChild(img);
-                                    fig.appendChild(btn);
-                                    const gridModal = document.querySelector(".gridModal");
-                                    gridModal.appendChild(fig);
+                                              form.reset();
+                                              uploadBox.innerHTML =  
+                                              `<i class="fa-regular fa-image upload-icon"></i>
+                                              <label for="image" class="upload-btn">+ Ajouter photo</label>
+                                              <p class="upload-info">jpg, png : 4mo max</p>
+                                              `;
+                                              toggleModal();
+
+                                              const lastReponse = await fetch('http://localhost:5678/api/works');
+                                              const lastProjets = await lastReponse.json(); 
+                                              affichageGallerie.textContent = '';
+                                              afficherProjets (lastProjets);
+
+                                              //Mise à jour du grid
+                                              const gridModal = document.querySelector(".gridModal");
+                                              gridModal.innerHTML = ``;
+                                              for (let i = 0; i < lastProjets.length; i++) {
+                                                //Affichage des projets
+                                                const fig = document.createElement('figure');
+                                                fig.style.position = "relative";
+
+                                                const img = document.createElement('img');
+                                                img.src = lastProjets[i].imageUrl;
+                                                img.alt = lastProjets[i].title;
+                                                
+                                                const btn = document.createElement('button');
+                                                btn.innerHTML= `<i class="fa-solid fa-trash-can"></i>`; 
+                                                btn.style.position = "absolute";
+                                                btn.style.top = "5px";
+                                                btn.style.right = "5px";
+
+                                                            // Suppression grâce au bouton poubelle. 
+
+                                                            btn.addEventListener('click', async () => {
+                                                              const figEl = btn.closest('figure');
+                                                              const imgEl = figEl.querySelector('img');
+                                                              const url = imgEl.getAttribute('src');
+
+                                                              const cible = lastProjets.find(p => p.imageUrl === url);
+                                                              const idASupprimer = cible.id;
+                                                              console.log('ID à supprimer :', idASupprimer);
+
+                                                                // On récupère le token depuis le localStorage
+                                                              const token = localStorage.getItem('token');
+
+                                                              // On envoie la requête DELETE vers l’API
+                                                              const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
+                                                              method: 'DELETE',
+                                                              headers: {
+                                                              'Authorization': `Bearer ${token}`,           // On présente le token
+                                                              'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
+                                                              }
+                                                              });
+
+                                                              if (response.ok) {
+                                                              figEl.remove();
+                                                              console.log(`Projet ${idASupprimer} supprimé`);
+
+                                                                //MAJ dynamique de index mode edit en fond
+
+                                                              const newReponse = await fetch('http://localhost:5678/api/works');
+                                                              const newProjets = await newReponse.json(); 
+                                                              affichageGallerie.textContent = '';
+                                                              afficherProjets(newProjets);
+                                                              }
+                                                            });
+                                                          
+                                                fig.appendChild(img);
+                                                fig.appendChild(btn);
+                                                const gridModal = document.querySelector(".gridModal");
+                                                gridModal.appendChild(fig);
+                                                }
+                                              }
+                                    } catch { //Gestion de l'erreur si pas de réponse du serveur 
+                                      const msgErrorForm = document.querySelector(".error-form-message");
+                                      msgErrorForm.innerText = "Une erreur est survenue. Réessayez ultérieurement.";
+                                      msgErrorForm.style.display = "flex";
                                     }
 
-                                }
+                          }
               
               
                                 // --- Active/désactive le bouton + (dé)clenche la soumission

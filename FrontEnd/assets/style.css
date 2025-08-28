@@ -473,6 +473,12 @@ footer nav ul {
 	border: solid rgb(20, 135, 229) 1px;
 }
 
+.message-erreur {
+	display: none;
+	justify-content: center;
+	margin-top: 20px;
+}
+
 /***** Formulaire ajout photo *****/
 
 .formAddPhoto {
@@ -522,6 +528,12 @@ footer nav ul {
 .upload-info {
   font-size: 10px;
   color: #444444;
+}
+
+.image-error {
+	display: none;
+	font-size: 1em;
+	color: red;
 }
 
 .inputForm {
@@ -577,4 +589,9 @@ footer nav ul {
 	cursor: not-allowed;
 	border-radius: 60px;
 	background-color: #A7A7A7;
+}
+
+.error-form-message {
+	display: none;
+	color: black;
 }
