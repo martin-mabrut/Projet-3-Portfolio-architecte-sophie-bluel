@@ -320,6 +320,23 @@ footer nav ul {
 
 /***** Modale *****/
 
+.modal2 {
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 40px;
+}
+
+.modal1 {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+
+}
+
 .modal-container {
 	display: none;
 	position: fixed;
@@ -341,10 +358,6 @@ footer nav ul {
 
 .modal {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 40px;
 	max-width: 630px;
 	padding: 50px 70px;
 	background-color: #fff;
@@ -385,6 +398,16 @@ footer nav ul {
 	background-color: #fff;
 }
 
+.back-modal {
+	border: none;
+	font-size: 18px;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	cursor: pointer;
+	background-color: #fff;
+}
+
 .modal-ctnt {
 	width: 420px;
 	height: 420px;
@@ -398,7 +421,6 @@ footer nav ul {
 	row-gap: 25px;
 	column-gap: 10px;
 	width: 420px;
-
 }
 
 .gridModal img {
@@ -422,3 +444,67 @@ footer nav ul {
 }
 
 /***** Formulaire ajout photo *****/
+
+.formAddPhoto {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 40px;
+	border-bottom: solid #B3B3B3 1px;
+	padding-bottom: 50px;
+}
+
+.ajoutPhotoForm {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #B9C5CC;
+  background-color: #E8F1F6;
+  width: 420px;
+  height: 169px;
+  border-radius: 3px;
+}
+
+.upload-icon {
+  font-size: 60px;  /* taille de l’icône */
+  opacity: 0.6;
+}
+
+.upload-btn {
+  display: inline-block;
+  background-color: #CBD6DC;
+  color: #306685;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.upload-info {
+  font-size: 10px;
+  color: #444444;
+}
+
+.inputForm {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.champAjoutPhoto {
+	height: 51px;
+	border: none;
+	box-shadow: 0px 4px 14px 0px #00000017;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+

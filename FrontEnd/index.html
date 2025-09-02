@@ -119,12 +119,45 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<div class="modal">
 		<button class="close-modal modal-trigger"><i class="fa-solid fa-xmark"></i></button>
-		<h1>Galerie photo</h1>
-		<div class="modal-ctnt">
-			<div class="gridModal"></div>
+		<div class="modal1">
+			<h1>Galerie photo</h1>
+			<div class="modal-ctnt">
+				<div class="gridModal"></div>
+			</div>
+			<button class="addPhoto">Ajouter une photo</button>
 		</div>
-		<button class="addPhoto">Ajouter une photo</button>
-	</div>
+
+		<div class="modal2">
+			<button class="back-modal"><i class="fa-solid fa-arrow-left"></i></button>
+				<h1>Ajout photo</h1>
+				<div class="formAddPhoto">
+					<form id="ajoutPhotoForm" class="ajoutPhotoForm">
+
+						<input type="file" id="image" accept=".jpg,.png" hidden>
+
+						<div class="upload-box">
+							<i class="fa-regular fa-image upload-icon"></i>
+							<label for="image" class="upload-btn">+ Ajouter photo</label>
+							<p class="upload-info">jpg, png : 4mo max</p>
+						</div>
+
+						<div class="inputForm">
+							<label for="title">Titre</label>
+							<input type="text" id="title" name="title" class="champAjoutPhoto">
+						</div>
+
+						<div class="inputForm">
+							<label for="category">Catégorie</label>
+							<select id="category" name="category" class="champAjoutPhoto inputCategory">
+								<option value="" selected disabled hidden></option>
+							</select>
+						</div>
+					</form>    
+				</div> 
+
+             	<button type="submit" form="ajoutPhotoForm" class="addPhoto">valider</button>
+		
+		</div>
 
 </div>
 </body>
