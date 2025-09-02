@@ -16,7 +16,6 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <header>
-	<div class="headerCtnt">
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
@@ -26,7 +25,6 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
-	</div>
 </header>
 <main>
 	<section id="introduction">
@@ -41,7 +39,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 		</article>
 	</section>
 	<section id="portfolio">
-		<div class="titleProjectsEdit">
+		<div id="titleProjectsEdit">
 			<h2>Mes Projets</h2>
 		</div>
 		<div class="filtres"></div>
@@ -114,5 +112,20 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 		</ul>
 	</nav>
 </footer>
+
+<div class="modal-container">
+
+	<div class="overlay modal-trigger"></div>
+
+	<div class="modal">
+		<button class="close-modal modal-trigger"><i class="fa-solid fa-xmark"></i></button>
+		<h1>Galerie photo</h1>
+		<div class="modal-ctnt">
+			<div class="gridModal"></div>
+		</div>
+		<button class="addPhoto">Ajouter une photo</button>
+	</div>
+
+</div>
 </body>
 </html>
