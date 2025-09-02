@@ -90,6 +90,41 @@ document.querySelector('.filtres').addEventListener('click', e => {
 
 });
 
+const params = new URLSearchParams(window.location.search);
+const hasEditParam = params.get('mode') === 'edit';
+const hasToken = !!localStorage.getItem('token');
+
+if (hasEditParam && hasToken) {
+  initEditMode();
+}
+
+function initEditMode() {
+  console.log('Mode édition activé ✅');
+  const headerEdit = document.createElement("p");
+  headerEdit.innerHTML = `<span><i class="fa-regular fa-pen-to-square"></i> Mode édition </span>`
+  headerEdit.classList.add("headerEdit")
+  
+  const header = document.querySelector("header");
+  header.appendChild(headerEdit);
+
+  const listeNav = document.querySelector("header ul")
+  listeNav.innerHTML =
+    `<li>projets</li>
+			<li>contact</li>
+			<li><a href="index.html">logout</a></li>
+			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>`;
+
+  const btnModif = document.createElement("p");
+  btnModif.innerHTML = `<a href="#"><i class="fa-regular fa-pen-to-square"></i> modifier</a>`;
+  btnModif.classList.add("btnModif");
+  
+  const titleProjectsEdit = document.querySelector(".titleProjectsEdit");
+  titleProjectsEdit.appendChild(btnModif);
+
+  const filtres = document.querySelector('.filtres');
+  filtres.innerHTML = ``;
+
+}
 
 }
 
