@@ -5,12 +5,12 @@ async function main() {
 
     const gallery = document.querySelector('.gallery');   
 
-    //Réinitialisation de la gallerie//
+    //Réinitialisation de la gallerie
 
     let affichageGallerie = document.querySelector('.gallery');
     affichageGallerie.textContent = '';
 
-    //Création des boutons filtres// 
+    //Création des boutons filtres
 
     const filtres = document.querySelector('.filtres');
     const labels = ["Tous", "Objets", "Appartements", "Hotels & restaurants"];
@@ -21,7 +21,7 @@ async function main() {
     filtres.appendChild(btn);
     }
 
-    //Affichage des projets à partir des données provenant de l'API//
+    //Affichage des projets à partir des données provenant de l'API
 
             function afficherProjets (listeFiltree) {for (let i = 0; i < listeFiltree.length; i++) {
               const fig = document.createElement('figure');
@@ -40,13 +40,13 @@ async function main() {
 
     afficherProjets (projets);
 
-    /***** Activation du bouton "Tous" dès le chargement de la page *****/
+    // Activation du bouton "Tous" dès le chargement de la page
 
     document.querySelectorAll('.filtres button').forEach(btn => {
     if (btn.textContent.trim() === 'Tous') btn.classList.add('btnFiltreActif');
     });
 
-    //Filtrage//
+    //Filtrage
 
             document.querySelector('.filtres').addEventListener('click', e => {
               if (e.target.textContent === 'Tous') {
@@ -86,7 +86,7 @@ async function main() {
 
                 });
 
-    /***** Affichage du mode édition de la page d'accueil *****/
+    //Affichage du mode édition de la page d'accueil
 
     const params = new URLSearchParams(window.location.search);
     const hasEditParam = params.get('mode') === 'edit';
@@ -96,7 +96,7 @@ async function main() {
       initEditMode();
       }
 
-    /*** Ouverture fermerture Modale ***/
+    //Ouverture fermerture Modale
 
     const modalContainer = document.querySelector(".modal-container");
     const modalTriggers = document.querySelectorAll(".modal-trigger");
@@ -106,11 +106,16 @@ async function main() {
             function toggleModal() {
               modalContainer.classList.toggle("active")
 
-              if (!modalContainer.classList.contains("active")) {
-                // Quand la modale est désactivée
+              if (!modalContainer.classList.contains("active")) { //Quand la modale est désactivée
+                
                 modal2.style.display = "none";
-                modal1.style.display = "flex";
-                //A chaque ouverture, la modale s'ouvre à la première page
+                modal1.style.display = "flex"; //A chaque ouverture, la modale s'ouvre à la première page
+                
+                const msgErrorGrid = document.querySelector(".message-erreur");
+                const msgErrorForm = document.querySelector(".error-form-message");
+                msgErrorGrid.style.display = "none";
+                msgErrorForm.style.display = "none"; //A chaque ouverture, les messages d'erreurs ont disparu
+                
               }
             };
 
@@ -128,6 +133,7 @@ async function main() {
               img.src = projets[i].imageUrl;
               img.alt = projets[i].title;
               
+              //Création des boutons poubelle
               const btn = document.createElement('button');
               btn.innerHTML= `<i class="fa-solid fa-trash-can"></i>`; 
               btn.style.position = "absolute";
@@ -145,7 +151,7 @@ async function main() {
                             const idASupprimer = cible.id;
                             console.log('ID à supprimer :', idASupprimer);
 
-                              // On récupère le token depuis le localStorage
+                            // On récupère le token depuis le localStorage
                             const token = localStorage.getItem('token');
 
                             // On envoie la requête DELETE vers l’API
@@ -154,7 +160,7 @@ async function main() {
                               method: 'DELETE',
                               headers: {
                               'Authorization': `Bearer ${token}`,           // On présente le token
-                              'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
+                              'Accept': 'application/json'                  // On demande une réponse JSON (Même si pas nescessaire ici)
                               }
                               });
 
@@ -162,12 +168,18 @@ async function main() {
                               figEl.remove();
                               console.log(`Projet ${idASupprimer} supprimé`);
 
-                                //MAJ dynamique de index mode edit en fond
+                             //MAJ dynamique de index mode edit en fond
 
                               const newReponse = await fetch('http://localhost:5678/api/works');
                               const newProjets = await newReponse.json(); 
                               affichageGallerie.textContent = '';
                               afficherProjets(newProjets);
+
+                              const msgErrorGrid = document.querySelector(".message-erreur");
+                              const msgErrorForm = document.querySelector(".error-form-message");
+                              msgErrorGrid.style.display = "none";
+                              msgErrorForm.style.display = "none"; //Suppression des messages erreurs
+
                               } else { //Gestion de l'erreur si token perdu                              
                                 const tokenLost = document.querySelector(".message-erreur");
                                 tokenLost.style.display = "flex";
@@ -198,7 +210,7 @@ async function main() {
 
                             if (titleValue === "") {
                               const btnValider = document.querySelector(".addPhotoValider");
-                              btnValider.style.backgroundColor = "#A7A7A7"; // revient au style CSS par défaut
+                              btnValider.style.backgroundColor = "#A7A7A7";
                               btnValider.style.cursor = "not-allowed";
                             };
                           }) 
@@ -208,6 +220,11 @@ async function main() {
                           btnBack.addEventListener('click', async () => {
                             modal1.style.display = "flex";
                             modal2.style.display = "none";
+
+                            const msgErrorGrid = document.querySelector(".message-erreur");
+                            const msgErrorForm = document.querySelector(".error-form-message");
+                            msgErrorGrid.style.display = "none";
+                            msgErrorForm.style.display = "none"; //Suppression des messages erreurs
                           })
               // Afficher les catégories dans le formulaire
               
@@ -305,8 +322,8 @@ async function main() {
                                                 msgErrorForm.style.display = "flex";
                                               } else {
 
-                                              // ✅ Lire la réponse JSON et l'afficher
-                                              const data = await res.json();
+                                              
+                                              const data = await res.json(); //Lire la réponse JSON et l'afficher dans la console
                                               console.log(data);
                                               
                                               form.reset();
@@ -322,11 +339,11 @@ async function main() {
                                               affichageGallerie.textContent = '';
                                               afficherProjets (lastProjets);
 
-                                              //Mise à jour du grid
+                                              //Mise à jour du grid 
                                               const gridModal = document.querySelector(".gridModal");
                                               gridModal.innerHTML = ``;
                                               for (let i = 0; i < lastProjets.length; i++) {
-                                                //Affichage des projets
+                                                //Ré-affichage des projets
                                                 const fig = document.createElement('figure');
                                                 fig.style.position = "relative";
 
@@ -340,26 +357,34 @@ async function main() {
                                                 btn.style.top = "5px";
                                                 btn.style.right = "5px";
 
-                                                            // Suppression grâce au bouton poubelle. 
+                                                            
+                                                          
+                                                fig.appendChild(img);
+                                                fig.appendChild(btn);
+                                                const gridModal = document.querySelector(".gridModal");
+                                                gridModal.appendChild(fig);
+
+                                                // Suppression grâce au bouton poubelle sur la nouvelle liste
 
                                                             btn.addEventListener('click', async () => {
-                                                              const figEl = btn.closest('figure');
-                                                              const imgEl = figEl.querySelector('img');
-                                                              const url = imgEl.getAttribute('src');
+                                                            const figEl = btn.closest('figure');
+                                                            const imgEl = figEl.querySelector('img');
+                                                            const url = imgEl.getAttribute('src');
 
-                                                              const cible = lastProjets.find(p => p.imageUrl === url);
-                                                              const idASupprimer = cible.id;
-                                                              console.log('ID à supprimer :', idASupprimer);
+                                                            const cible = lastProjets.find(p => p.imageUrl === url);
+                                                            const idASupprimer = cible.id;
+                                                            console.log('ID à supprimer :', idASupprimer);
 
-                                                                // On récupère le token depuis le localStorage
-                                                              const token = localStorage.getItem('token');
+                                                              // On récupère le token depuis le localStorage
+                                                            const token = localStorage.getItem('token');
 
-                                                              // On envoie la requête DELETE vers l’API
+                                                            // On envoie la requête DELETE vers l’API
+                                                            try {
                                                               const response = await fetch(`http://localhost:5678/api/works/${idASupprimer}`, {
                                                               method: 'DELETE',
                                                               headers: {
                                                               'Authorization': `Bearer ${token}`,           // On présente le token
-                                                              'Accept': 'application/json'                  // On demande une réponse JSON (optionnel)
+                                                              'Accept': 'application/json'                  // On demande une réponse JSON (Même si pas nescessaire ici)
                                                               }
                                                               });
 
@@ -373,13 +398,23 @@ async function main() {
                                                               const newProjets = await newReponse.json(); 
                                                               affichageGallerie.textContent = '';
                                                               afficherProjets(newProjets);
+
+                                                              const msgErrorGrid = document.querySelector(".message-erreur");
+                                                              const msgErrorForm = document.querySelector(".error-form-message");
+                                                              msgErrorGrid.style.display = "none";
+                                                              msgErrorForm.style.display = "none"; //Suppression des messages erreurs
+
+                                                              } else { //Gestion de l'erreur si token perdu                              
+                                                                const tokenLost = document.querySelector(".message-erreur");
+                                                                tokenLost.style.display = "flex";
+                                                                tokenLost.innerText = "Connexion expirée. Veuillez vous reconnecter.";
                                                               }
+                                                            } catch { //Gestion de l'erreur si pas de réponse du serveur                              
+                                                                const responseNone = document.querySelector(".message-erreur");
+                                                                responseNone.style.display = "flex";
+                                                                responseNone.innerText = "Une erreur est survenue. Réessayez ultérieurement.";
+                                                            }
                                                             });
-                                                          
-                                                fig.appendChild(img);
-                                                fig.appendChild(btn);
-                                                const gridModal = document.querySelector(".gridModal");
-                                                gridModal.appendChild(fig);
                                                 }
                                               }
                                     } catch { //Gestion de l'erreur si pas de réponse du serveur 
@@ -391,14 +426,14 @@ async function main() {
                           }
               
               
-                                // --- Active/désactive le bouton + (dé)clenche la soumission
+                                //Active/désactive le bouton + (dé)clenche la soumission
                                 function checkForm() {
                                   if (allFieldsFilled()) {
                                     btnValider.style.backgroundColor = "#1D6154";
                                     btnValider.style.cursor = "pointer";
                                     form.addEventListener("submit", handleSubmit);
                                   } else {
-                                    btnValider.style.backgroundColor = "#A7A7A7"; // revient au style CSS par défaut
+                                    btnValider.style.backgroundColor = "#A7A7A7";
                                     btnValider.style.cursor = "not-allowed";
                                     form.removeEventListener("submit", handleSubmit);
                                   }
@@ -418,9 +453,9 @@ async function main() {
 
 main();
 
-function initEditMode() {
+function initEditMode() { //Interface après login
 
-  console.log('Mode édition activé ✅');
+  console.log('Mode édition activé');
   const bandeauEdit = document.createElement("div");
   bandeauEdit.innerHTML = `<span><i class="fa-regular fa-pen-to-square"></i> Mode édition </span>`
   bandeauEdit.classList.add("bandeauEdit")

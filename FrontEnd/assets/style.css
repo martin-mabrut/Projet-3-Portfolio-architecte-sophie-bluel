@@ -543,25 +543,25 @@ footer nav ul {
 }
 
 .select-wrapper {
-  position: relative;       /* référence pour positionner l’icône */   /* taille s’ajuste au contenu */
-  width: 100%;              /* le select prend toute la largeur */
+  position: relative;       
+  width: 100%;              
 }
 
 .select-wrapper select {
-  width: 100%;              /* le select occupe 100% du wrapper */      /* espace réservé à l’icône */
-  appearance: none;         /* supprime le chevron natif */
-  -webkit-appearance: none; /* compatibilité Safari/Chrome */
-  -moz-appearance: none;    /* compatibilité Firefox */
+  width: 100%;              
+  appearance: none;         
+  -webkit-appearance: none; 
+  -moz-appearance: none;    
   background-color: white;
 }
 
 .select-wrapper i {
-  position: absolute;        /* placé par rapport au wrapper */
-  right: 20px;               /* décale l’icône du bord droit */
-  top: 50%;                  /* place l’icône au milieu vertical */
-  transform: translateY(-50%); /* ajuste parfaitement au centre */
-  pointer-events: none;      /* l’icône ne bloque pas le clic */
-  color: #6C6C6C;               /* couleur personnalisable */
+  position: absolute;        
+  right: 20px;               
+  top: 50%;                  
+  transform: translateY(-50%); 
+  pointer-events: none;      
+  color: #6C6C6C;               
 }
 
 .champAjoutPhoto {
