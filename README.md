@@ -1,4 +1,6 @@
-# Portfolio-architecte-sophie-bluel
+Pour ma pratique en tant qu'étudiant, j'ai choisi d'installé vite dans le dossier FrontEnd. Je lance alors mon server web en local avec la commande pnpm run dev dans mon terminal. Je n'utilise pas liveserver.
+
+Le reste de ce fichier faisait parti du repo starter sur le github mis à disposition par OpenClassrooms :
 
 Code du projet 6 d'intégrateur web.
 
