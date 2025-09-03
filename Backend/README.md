@@ -1,3 +1,7 @@
+Ce fichier faisait parti du repo starter sur le github mis à disposition par OpenClassrooms.
+
+Pour ma pratique en tant qu'étudiant, j'utilise pnpm. J'ai donc remplacé les commandes npm par pnpm.
+
 # Backend API - Sophie Bluel
 
 Ce dossier contient le code backend du projet
